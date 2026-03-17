@@ -1,0 +1,43 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (!sc.hasNext()) return;
+        String s = sc.next();
+        
+        // Step 1: Sort characters to ensure lexicographical start
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        
+        boolean[] used = new boolean[chars.length];
+        backtrack(chars, new StringBuilder(), used);
+        
+        sc.close();
+    }
+
+    private static void backtrack(char[] chars, StringBuilder current, boolean[] used) {
+        // Base case: if current permutation length equals input length, print it
+        if (current.length() == chars.length) {
+            System.out.println(current.toString());
+            return;
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            // If character is already in the current path, skip it
+            if (used[i]) continue;
+
+            // Choose the character
+            used[i] = true;
+            current.append(chars[i]);
+
+            // Explore further
+            backtrack(chars, current, used);
+
+            // Backtrack: remove the character and mark as unused
+            current.deleteCharAt(current.length() - 1);
+            used[i] = false;
+        }
+    }
+}
